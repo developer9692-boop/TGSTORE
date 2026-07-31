@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Secure Payment | TG Account Store</title>
+<meta name="description" content="Secure UPI payment page for TG Account Store. Scan the QR code, pay, and submit your transaction ID.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💳</text></svg>">
+
+<style>
+/* ===================== BLACK & WHITE PAYMENT THEME ===================== */
+:root{
+  --bg:#000000;
+  --bg-2:#0c0c0c;
+  --panel:rgba(255,255,255,0.05);
+  --panel-border:rgba(255,255,255,0.14);
+  --white:#ffffff;
+  --gray:#a6a6a6;
+  --gray-dim:#787878;
+  --danger:#ff5c5c;
+  --success:#e8e8e8;
+  --radius:18px;
+  --glow:0 0 25px rgba(255,255,255,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Segoe UI', Arial, sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::-webkit-scrollbar{width:9px;}
+::-webkit-scrollbar-track{background:#000;}
+::-webkit-scrollbar-thumb{background:#444; border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:#666;}
+
+.bg-grid{
+  position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.04), transparent 45%),
+    #000;
+}
+.particles{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;}
+.particle{
+  position:absolute; bottom:-10%; width:3px; height:3px; border-radius:50%;
+  background:rgba(255,255,255,0.5); opacity:0.5;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0); opacity:0;}
+  10%{opacity:.6;}
+  100%{transform:translateY(-110vh); opacity:0;}
+}
+
+.wrap{
+  max-width:640px; margin:0 auto; padding:40px 20px 80px;
+  min-height:100vh; display:flex; flex-direction:column;
+}
+
+/* header */
+.top-bar{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; letter-spacing:.5px;}
+.brand .b-icon{
+  width:34px; height:34px; border-radius:9px; background:#111; border:1px solid var(--panel-border);
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+}
+.back-link{color:var(--gray); text-decoration:none; font-size:13px; font-weight:600; border:1px solid var(--panel-border); padding:8px 16px; border-radius:20px; transition:.3s;}
+.back-link:hover{color:var(--white); border-color:var(--white);}
+
+/* card container */
+.card{
+  background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius);
+  backdrop-filter:blur(14px); padding:30px 26px; margin-bottom:20px;
+  animation:fadeUp .6s ease;
+}
+@keyframes fadeUp{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
+
+/* gateway header */
+.gateway-header{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  padding-bottom:18px; margin-bottom:18px; border-bottom:1px dashed var(--panel-border);
+}
+.g-left{display:flex; align-items:center; gap:10px;}
+.g-lock{
+  width:36px; height:36px; border-radius:50%; background:#111; border:1px solid var(--white);
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+}
+.g-title{font-size:14px; font-weight:700;}
+.g-sub{font-size:11px; color:var(--gray-dim);}
+.order-id-tag{
+  font-size:11px; font-weight:700; letter-spacing:.5px; color:var(--white);
+  background:#111; border:1px solid var(--panel-border); padding:5px 12px; border-radius:20px;
+}
+
+/* order summary rows */
+.summary-row{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed rgba(255,255,255,0.1); font-size:14px;}
+.summary-row:last-child{border-bottom:none;}
+.summary-row .label{color:var(--gray);}
+.summary-row .value{font-weight:700;}
+.summary-row.total{margin-top:4px;}
+.summary-row.total .value{font-size:20px;}
+
+/* amount display */
+.amount-display{text-align:center; margin:6px 0 4px;}
+.amount-display .a-label{font-size:11px; color:var(--gray); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;}
+.amount-display .a-value{font-size:44px; font-weight:900;}
+.amount-display .a-value span{font-size:24px; color:var(--gray); vertical-align:top; margin-right:2px;}
+
+/* timer */
+.timer-wrap{display:flex; align-items:center; justify-content:center; margin:18px 0 14px;}
+.timer-badge{
+  display:flex; align-items:center; gap:8px; background:#111; border:1px solid var(--panel-border);
+  padding:8px 18px; border-radius:50px; font-size:13px; color:var(--gray); font-weight:600;
+}
+.timer-clock{font-family:'Courier New',monospace; font-size:16px; font-weight:800; color:var(--white); letter-spacing:1px;}
+.timer-clock.warning{color:var(--danger); animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.timer-track{width:100%; height:5px; background:#151515; border-radius:6px; overflow:hidden; margin-bottom:22px;}
+.timer-fill{height:100%; width:100%; background:linear-gradient(90deg,#ffffff,#9a9a9a); border-radius:6px; transition:width 1s linear;}
+.timer-fill.warning{background:linear-gradient(90deg,var(--danger),#ff9d9d);}
+
+/* QR frame */
+.qr-wrap{display:flex; flex-direction:column; align-items:center; gap:16px; margin-bottom:10px;}
+.qr-frame{
+  position:relative; background:#fff; padding:16px; border-radius:16px; box-shadow:var(--glow);
+  overflow:hidden;
+}
+#qrcode-canvas{display:flex; align-items:center; justify-content:center; width:200px; height:200px;}
+.scan-line{
+  position:absolute; left:8px; right:8px; height:3px; top:16px;
+  background:linear-gradient(90deg,transparent,#000,transparent);
+  animation:scanMove 2.2s ease-in-out infinite; pointer-events:none;
+}
+@keyframes scanMove{
+  0%{top:16px; opacity:0;} 10%{opacity:.7;} 90%{opacity:.7;} 100%{top:calc(100% - 20px); opacity:0;}
+}
+.qr-expired-overlay{
+  position:absolute; inset:0; background:rgba(0,0,0,0.95);
+  display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+  border-radius:16px; text-align:center; padding:20px;
+}
+.qr-expired-overlay.show{display:flex;}
+.qr-expired-overlay .exp-icon{font-size:32px;}
+.qr-expired-overlay h4{font-size:14px; color:var(--danger); font-weight:800;}
+.qr-expired-overlay p{font-size:12px; color:var(--gray); max-width:220px;}
+.regen-btn{
+  background:var(--white); color:#000; border:none; padding:10px 22px; border-radius:10px;
+  font-weight:800; font-size:13px; cursor:pointer;
+}
+
+.upi-id-box{
+  display:flex; align-items:center; gap:10px; background:#111; border:1px solid var(--panel-border);
+  padding:11px 18px; border-radius:12px; font-weight:700; font-size:14px;
+}
+.copy-btn{
+  background:var(--white); color:#000; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;
+  font-size:12.5px; font-weight:800; transition:.3s;
+}
+.copy-btn.copied{background:var(--gray);}
+.pay-actions{display:flex; gap:14px; justify-content:center; margin:18px 0 6px; flex-wrap:wrap;}
+
+/* status row */
+.status-row{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  background:#111; border:1px solid var(--panel-border); border-radius:50px;
+  padding:10px 22px; margin:16px auto; max-width:340px; font-size:13.5px; font-weight:600;
+}
+.status-dot{width:10px; height:10px; border-radius:50%; background:#c9c9c9; animation:blink 1.2s infinite;}
+.status-row.checking .status-dot{background:var(--white); animation:blink .6s infinite;}
+.status-row.expired .status-dot{background:var(--danger); animation:none;}
+#statusText{color:var(--gray);}
+.status-row.expired #statusText{color:var(--danger); font-weight:700;}
+
+/* instructions */
+.instructions{background:#0d0d0d; border:1px solid var(--panel-border); border-radius:14px; padding:18px 22px; margin-top:6px;}
+.instructions div.title{font-weight:700; margin-bottom:10px; font-size:14px;}
+.instructions li{color:var(--gray); font-size:13.5px; margin-bottom:8px; margin-left:18px; line-height:1.5;}
+
+/* security badges */
+.security-row{display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:18px; font-size:11px; color:var(--gray-dim);}
+.security-row .badge{display:flex; align-items:center; gap:6px;}
+.security-row .badge b{color:var(--white);}
+
+/* txn form */
+.txn-form-title{font-size:17px; font-weight:800; margin-bottom:4px;}
+.txn-form-sub{font-size:13px; color:var(--gray); margin-bottom:20px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block; margin-bottom:8px; font-size:13px; color:var(--gray); font-weight:600;}
+.form-group input{
+  width:100%; padding:14px 16px; border-radius:12px; background:#0d0d0d;
+  border:1px solid var(--panel-border); color:var(--white); font-size:15px; outline:none; transition:.3s;
+}
+.form-group input:focus{border-color:var(--white); box-shadow:0 0 10px rgba(255,255,255,0.15);}
+.form-group .error-msg{color:var(--danger); font-size:12px; margin-top:6px; display:none;}
+.form-group.has-error input{border-color:var(--danger);}
+.form-group.has-error .error-msg{display:block;}
+
+.btn-full{
+  width:100%; padding:16px; border-radius:12px; background:var(--white); color:#000;
+  font-weight:800; font-size:15px; cursor:pointer; border:none; transition:transform .2s ease;
+}
+.btn-full:hover{transform:translateY(-2px);}
+.btn-full:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+.mini-spinner{
+  width:16px; height:16px; border:2.5px solid rgba(0,0,0,0.25); border-top:2.5px solid #000;
+  border-radius:50%; animation:spin .7s linear infinite; display:inline-block; vertical-align:middle; margin-right:8px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.hint-line{text-align:center; font-size:12px; color:var(--gray-dim); margin-top:14px;}
+
+/* toast */
+.toast{
+  position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:#111; border:1px solid var(--panel-border); color:var(--white);
+  padding:14px 26px; border-radius:12px; font-size:14px; font-weight:600;
+  z-index:5000; opacity:0; visibility:hidden; transition:.4s;
+}
+.toast.show{opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);}
+.toast.error{border-color:var(--danger); color:var(--danger);}
+
+/* no-order state */
+.no-order-box{text-align:center; padding:60px 20px;}
+.no-order-box .icon{font-size:44px; margin-bottom:16px;}
+.no-order-box h2{font-size:20px; margin-bottom:10px;}
+.no-order-box p{color:var(--gray); font-size:14px;}
+
+@media(max-width:480px){
+  .wrap{padding:26px 16px 60px;}
+  .amount-display .a-value{font-size:36px;}
+  .card{padding:22px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="particles" id="particles"></div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="brand"><div class="b-icon">📨</div>TG Store</div>
+    <a href="index.html" class="back-link">✕ Cancel &amp; Go Back</a>
+  </div>
+
+  <!-- Shown only if no active order was found -->
+  <div class="card no-order-box" id="noOrderBox" style="display:none;">
+    <div class="icon">⚠️</div>
+    <h2>No Active Order Found</h2>
+    <p>It looks like your session expired or you opened this page directly. Redirecting you back to the store...</p>
+  </div>
+
+  <!-- Main payment content -->
+  <div id="paymentContent">
+    <div class="card">
+      <div class="gateway-header">
+        <div class="g-left">
+          <div class="g-lock">🔒</div>
+          <div>
+            <div class="g-title">Secure UPI Payment Gateway</div>
+            <div class="g-sub">256-bit encrypted • Powered by NPCI UPI</div>
+          </div>
+        </div>
+        <div class="order-id-tag" id="orderIdTag">ORDER #TGS000000</div>
+      </div>
+
+      <div class="summary-row"><span class="label">Product</span><span class="value" id="sumProduct">Indian Telegram Account</span></div>
+      <div class="summary-row"><span class="label">Selected Number</span><span class="value" id="sumNumber">-</span></div>
+      <div class="summary-row"><span class="label">Quantity</span><span class="value" id="sumQty">-</span></div>
+
+      <div class="amount-display">
+        <div class="a-label">Amount Payable</div>
+        <div class="a-value"><span>₹</span><span id="amountValue">0</span></div>
+      </div>
+
+      <div class="timer-wrap">
+        <div class="timer-badge">
+          <span>⏱ Complete payment within</span>
+          <span class="timer-clock" id="timerClock">10:00</span>
+        </div>
+      </div>
+      <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+      <div class="qr-wrap">
+        <div class="qr-frame">
+          <div id="qrcode-canvas"></div>
+          <div class="scan-line" id="scanLine"></div>
+          <div class="qr-expired-overlay" id="qrExpiredOverlay">
+            <div class="exp-icon">⌛</div>
+            <h4>QR Code Expired</h4>
+            <p>This payment session timed out for security reasons.</p>
+            <button class="regen-btn" onclick="regenerateSession()">🔄 Regenerate QR</button>
+          </div>
+        </div>
+        <div class="upi-id-box">
+          <span id="upiIdText">8707210511@fam</span>
+          <button class="copy-btn" id="copyUpiBtn" onclick="copyUpiId()">Copy UPI ID</button>
+        </div>
+      </div>
+
+      <div class="pay-actions">
+        <button class="copy-btn" style="padding:11px 20px;" onclick="downloadQR()">⬇ Download QR Code</button>
+      </div>
+
+      <div class="status-row" id="statusRow">
+        <span class="status-dot"></span>
+        <span id="statusText">Waiting for payment confirmation...</span>
+      </div>
+
+      <div class="instructions">
+        <div class="title">Payment Instructions:</div>
+        <ol>
+          <li>Scan the QR code using any UPI app (GPay, PhonePe, Paytm)</li>
+          <li>Complete the payment of the exact total amount before the timer ends</li>
+          <li>Copy the Transaction ID / UTR number from your payment app</li>
+          <li>Enter it below and submit to confirm your order</li>
+        </ol>
+      </div>
+
+      <div class="security-row">
+        <span class="badge">🛡️ <b>SSL</b> Secured</span>
+        <span class="badge">✅ <b>PCI-DSS</b> Compliant</span>
+        <span class="badge">🔐 <b>UPI</b> Verified</span>
+      </div>
+    </div>
+
+    <!-- Transaction ID submission card -->
+    <div class="card">
+      <div class="txn-form-title">I've Completed the Payment</div>
+      <div class="txn-form-sub">Enter your transaction ID / UTR number below to confirm your order</div>
+
+      <form id="txnForm" action="https://formsubmit.co/developer8709@gmail.com" method="POST">
+        <!-- FormSubmit config -->
+        <input type="hidden" name="_subject" value="Payment Received - Awaiting Order Confirmation - TG Account Store">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <!-- After FormSubmit processes this, it redirects the browser here -->
+        <input type="hidden" name="_next" id="hNext" value="index.html?paid=true">
+
+        <div class="form-group">
+          <label>Transaction ID (UTR)</label>
+          <input type="text" id="fTxn" placeholder="Enter transaction ID from your UPI app">
+          <div class="error-msg">Enter a valid transaction ID (min 6 characters)</div>
+        </div>
+
+        <!-- hidden order-context fields sent to email -->
+        <input type="hidden" name="Order Reference" id="hOrderId" value="">
+        <input type="hidden" name="Country" id="hCountry" value="India">
+        <input type="hidden" name="Product Name" id="hProduct" value="Indian Telegram Account">
+        <input type="hidden" name="Selected Telegram Number" id="hNumber" value="">
+        <input type="hidden" name="Quantity" id="hQty" value="">
+        <input type="hidden" name="Price Per Account" id="hPrice" value="">
+        <input type="hidden" name="Total Amount" id="hTotal" value="">
+        <input type="hidden" name="Transaction ID" id="hTxnHidden" value="">
+        <input type="hidden" name="Payment Date and Time" id="hDateTime" value="">
+
+        <button type="submit" class="btn-full" id="submitTxnBtn">✅ Confirm Payment &amp; Continue</button>
+      </form>
+      <div class="hint-line">Your details are sent securely via FormSubmit.co, then you'll return to the store to finish your order.</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- QRCode.js library for dynamic QR generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* ============================================================
+   PAYMENT PAGE LOGIC
+   Reads order details saved by index.html, generates a UPI QR,
+   runs a real checkout-style countdown, and lets the user submit
+   their Transaction ID (emailed via FormSubmit) before returning
+   to the main store to finish the order form.
+============================================================ */
+
+/* ---------- particles (monochrome) ---------- */
+(function generateParticles(){
+  const container = document.getElementById('particles');
+  for(let i=0;i<26;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*3+2;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDuration = (Math.random()*10+8)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    container.appendChild(p);
+  }
+})();
+
+function showToast(msg, type){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast show '+(type||'');
+  setTimeout(()=>{ toast.className = 'toast'; }, 3200);
+}
+
+/* ---------- load order data saved by index.html ---------- */
+let orderData = null;
+try{ orderData = JSON.parse(sessionStorage.getItem('tg_order') || 'null'); }catch(err){ orderData = null; }
+
+if(!orderData){
+  document.getElementById('paymentContent').style.display = 'none';
+  document.getElementById('noOrderBox').style.display = 'block';
+  setTimeout(()=>{ window.location.href = 'index.html'; }, 2500);
+} else {
+  initPaymentPage();
+}
+
+const upiId = '8707210511@fam';
+let sessionExpired = false;
+const PAYMENT_WINDOW_SECONDS = 600; // 10 minutes
+let secondsLeft = PAYMENT_WINDOW_SECONDS;
+let countdownInterval = null;
+
+function initPaymentPage(){
+  document.getElementById('orderIdTag').textContent = 'ORDER #'+orderData.orderId;
+  document.getElementById('sumNumber').textContent = orderData.number;
+  document.getElementById('sumQty').textContent = orderData.qty;
+  document.getElementById('amountValue').textContent = orderData.total;
+
+  document.getElementById('hOrderId').value = orderData.orderId;
+  document.getElementById('hNumber').value = orderData.number;
+  document.getElementById('hQty').value = orderData.qty;
+  document.getElementById('hPrice').value = '₹'+orderData.price;
+  document.getElementById('hTotal').value = '₹'+orderData.total;
+
+  generateQRCode();
+}
+
+function formatTime(totalSeconds){
+  const m = Math.floor(totalSeconds/60).toString().padStart(2,'0');
+  const s = Math.floor(totalSeconds%60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function generateQRCode(){
+  sessionExpired = false;
+  const upiLink = `upi://pay?pa=${upiId}&pn=TG%20Account%20Store&am=${orderData.total}&cu=INR&tn=${orderData.orderId}`;
+
+  const qrContainer = document.getElementById('qrcode-canvas');
+  qrContainer.innerHTML = '';
+
+  try{
+    new QRCode(qrContainer, {
+      text: upiLink,
+      width: 200,
+      height: 200,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }catch(err){
+    qrContainer.innerHTML = '<p style="color:#000;padding:20px;font-size:12px;">QR unavailable. Please pay manually using the UPI ID below.</p>';
+  }
+
+  document.getElementById('qrExpiredOverlay').classList.remove('show');
+  document.getElementById('scanLine').style.display = 'block';
+  setStatusRow('', 'Waiting for payment confirmation...');
+  startCountdown();
+}
+
+function startCountdown(){
+  stopCountdown();
+  secondsLeft = PAYMENT_WINDOW_SECONDS;
+  updateTimerUI();
+  countdownInterval = setInterval(()=>{
+    secondsLeft--;
+    updateTimerUI();
+    if(secondsLeft <= 0){
+      stopCountdown();
+      expireSession();
+    }
+  },1000);
+}
+function stopCountdown(){
+  if(countdownInterval){ clearInterval(countdownInterval); countdownInterval = null; }
+}
+function updateTimerUI(){
+  const clock = document.getElementById('timerClock');
+  const fill = document.getElementById('timerFill');
+  if(!clock || !fill) return;
+  clock.textContent = formatTime(secondsLeft);
+  const pct = Math.max(0,(secondsLeft/PAYMENT_WINDOW_SECONDS)*100);
+  fill.style.width = pct+'%';
+  const warning = secondsLeft <= 60;
+  clock.classList.toggle('warning', warning);
+  fill.classList.toggle('warning', warning);
+}
+function expireSession(){
+  sessionExpired = true;
+  document.getElementById('qrExpiredOverlay').classList.add('show');
+  document.getElementById('scanLine').style.display = 'none';
+  setStatusRow('expired', '⛔ Payment session expired');
+}
+function regenerateSession(){
+  showToast('New QR generated, timer reset!');
+  generateQRCode();
+}
+function setStatusRow(mode, text){
+  const row = document.getElementById('statusRow');
+  row.className = 'status-row' + (mode ? ' '+mode : '');
+  document.getElementById('statusText').textContent = text;
+}
+
+function copyUpiId(){
+  navigator.clipboard.writeText(upiId).then(()=>{
+    showToast('UPI ID copied to clipboard!');
+    const btn = document.getElementById('copyUpiBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1800);
+  }).catch(()=>{
+    showToast('Could not copy. Please copy manually.','error');
+  });
+}
+
+function downloadQR(){
+  const qrContainer = document.getElementById('qrcode-canvas');
+  const img = qrContainer.querySelector('img');
+  const canvas = qrContainer.querySelector('canvas');
+  let dataUrl = null;
+  if(canvas){ dataUrl = canvas.toDataURL('image/png'); }
+  else if(img){ dataUrl = img.src; }
+
+  if(dataUrl){
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'TG-Store-UPI-QR.png';
+    link.click();
+    showToast('QR Code downloaded!');
+  } else {
+    showToast('QR not ready yet, please wait.','error');
+  }
+}
+
+/* ============================================================
+   TRANSACTION ID FORM SUBMISSION
+   Validates the txn id, saves it to sessionStorage so index.html
+   can show it after redirect, then performs a real form submit
+   to FormSubmit.co (emails order+txn details) which redirects
+   back to index.html?paid=true via the _next field.
+============================================================ */
+const txnForm = document.getElementById('txnForm');
+
+txnForm.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const txnInput = document.getElementById('fTxn');
+  const txnVal = txnInput.value.trim();
+  const group = txnInput.closest('.form-group');
+
+  if(txnVal.length < 6){
+    group.classList.add('has-error');
+    showToast('Please enter a valid transaction ID','error');
+    return;
+  }
+  group.classList.remove('has-error');
+
+  if(sessionExpired){
+    showToast('Payment session expired. Please regenerate the QR code.','error');
+    return;
+  }
+
+  // Save txn id + finalize order data for index.html to pick up after redirect
+  orderData.txnId = txnVal;
+  orderData.paidAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  sessionStorage.setItem('tg_order', JSON.stringify(orderData));
+
+  document.getElementById('hTxnHidden').value = txnVal;
+  document.getElementById('hDateTime').value = orderData.paidAt;
+
+  const submitBtn = document.getElementById('submitTxnBtn');
+  submitBtn.innerHTML = '<span class="mini-spinner"></span> Submitting to gateway...';
+  submitBtn.disabled = true;
+
+  // Real form submission -> FormSubmit.co emails the order+txn, then
+  // redirects the browser to index.html?paid=true (see the _next field)
+  setTimeout(()=>{
+    txnForm.submit();
+  }, 500);
+});
+</script>
+</body>
+</html>
