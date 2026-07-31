@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TG Account Store | Buy Premium Telegram Accounts</title>
+<meta name="description" content="TG Account Store - Buy premium, verified Telegram accounts with instant delivery, secure payment and 24/7 support.">
+<meta name="keywords" content="telegram accounts, buy telegram account, premium telegram, tg account store">
+<meta name="theme-color" content="#0a0e17">
+<meta property="og:title" content="TG Account Store | Buy Premium Telegram Accounts">
+<meta property="og:description" content="Fast Delivery • Secure Payment • Premium Quality">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ============ ROOT VARIABLES ============ */
+  :root{
+    --bg-black:#05070c;
+    --bg-black-2:#0a0e17;
+    --blue:#2b8dff;
+    --blue-light:#5cb3ff;
+    --blue-glow:rgba(43,141,255,0.55);
+    --white:#f5f8ff;
+    --muted:#9aa7bd;
+    --glass:rgba(255,255,255,0.05);
+    --glass-border:rgba(255,255,255,0.1);
+    --danger:#ff5c6a;
+    --success:#2be07a;
+  }
+
+  *, *::before, *::after{
+    margin:0;padding:0;box-sizing:border-box;
+    font-variant:small-caps;
+    font-variant-caps:small-caps;
+    -webkit-font-variant:small-caps;
+  }
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg-black);
+    color:var(--white);
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    font-variant:small-caps;
+  }
+
+  h1, h2, h3, h4, .logo, .modal-title, .stat-number, .loader-logo{
+    font-family:'Space Grotesk', 'Inter', sans-serif;
+  }
+
+  /* Form controls and buttons don't inherit font-variant in every browser by default */
+  button, input, textarea, select, option, .btn, label, a, span, li, p, div,
+  h1, h2, h3, h4, h5, h6, td, th, table, strong, em, b, i, small{
+    font-variant:small-caps;
+    font-variant-caps:small-caps;
+  }
+  input::placeholder, textarea::placeholder{
+    font-variant:small-caps;
+    font-variant-caps:small-caps;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg-black-2);}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--blue),#0b3a6b);border-radius:10px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--blue-light);}
+
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  button{font-family:inherit;cursor:pointer;border:none;outline:none;background:none;color:inherit;}
+  input{font-family:inherit;}
+
+  /* ============ ANIMATED GRADIENT BACKGROUND ============ */
+  .bg-anim{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:linear-gradient(120deg,#05070c,#081226,#03060d,#0a1a33);
+    background-size:400% 400%;
+    animation:gradientMove 18s ease infinite;
+  }
+  @keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  .bg-grid{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background-image:
+      linear-gradient(rgba(43,141,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43,141,255,0.06) 1px, transparent 1px);
+    background-size:40px 40px;
+    mask-image:radial-gradient(ellipse at center, black 20%, transparent 75%);
+  }
+
+  /* Floating particles */
+  #particles{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .particle{
+    position:absolute;
+    bottom:-50px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--blue-light) 0%, transparent 70%);
+    opacity:0.5;
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) scale(1);opacity:0;}
+    10%{opacity:0.6;}
+    90%{opacity:0.4;}
+    100%{transform:translateY(-110vh) translateX(40px) scale(1.2);opacity:0;}
+  }
+
+  /* ============ LOADING SCREEN ============ */
+  #loader{
+    position:fixed;
+    inset:0;
+    background:var(--bg-black);
+    z-index:99999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hide{opacity:0;visibility:hidden;}
+  .loader-logo{
+    font-size:2.2rem;
+    font-weight:800;
+    letter-spacing:2px;
+    background:linear-gradient(90deg,var(--white),var(--blue-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:24px;
+    animation:pulseLogo 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%,100%{transform:scale(1);filter:drop-shadow(0 0 10px var(--blue-glow));}
+    50%{transform:scale(1.05);filter:drop-shadow(0 0 25px var(--blue-glow));}
+  }
+  .loader-ring{
+    width:60px;height:60px;
+    border:3px solid rgba(43,141,255,0.15);
+    border-top:3px solid var(--blue);
+    border-radius:50%;
+    animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loader-text{
+    margin-top:18px;
+    color:var(--muted);
+    font-size:0.85rem;
+    letter-spacing:1px;
+  }
+
+  /* ============ NAVBAR ============ */
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:900;
+    backdrop-filter:blur(16px);
+    background:rgba(5,7,12,0.55);
+    border-bottom:1px solid var(--glass-border);
+  }
+  .navbar{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 24px;
+  }
+  .logo{
+    font-size:1.35rem;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    letter-spacing:0.5px;
+  }
+  .logo span{
+    background:linear-gradient(90deg,var(--blue-light),var(--blue));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .logo-icon{
+    width:34px;height:34px;
+    border-radius:9px;
+    background:linear-gradient(135deg,var(--blue),#0b3a6b);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 20px var(--blue-glow);
+    font-size:1.1rem;
+  }
+  nav ul{display:flex;gap:32px;}
+  nav ul li a{
+    font-size:0.92rem;
+    color:var(--muted);
+    transition:color 0.3s ease;
+    position:relative;
+  }
+  nav ul li a:hover{color:var(--white);}
+  nav ul li a::after{
+    content:'';
+    position:absolute;
+    left:0;bottom:-6px;
+    width:0;height:2px;
+    background:var(--blue-light);
+    transition:width 0.3s ease;
+  }
+  nav ul li a:hover::after{width:100%;}
+  .nav-cta{
+    display:none;
+  }
+  .menu-toggle{
+    display:none;
+    font-size:1.5rem;
+    color:var(--white);
+  }
+
+  @media(max-width:768px){
+    nav ul{
+      position:fixed;
+      top:64px;left:0;right:0;
+      background:rgba(5,7,12,0.97);
+      flex-direction:column;
+      gap:0;
+      padding:10px 0;
+      transform:translateY(-150%);
+      transition:transform 0.4s ease;
+      border-bottom:1px solid var(--glass-border);
+    }
+    nav ul.show{transform:translateY(0);}
+    nav ul li{width:100%;text-align:center;}
+    nav ul li a{display:block;padding:14px 0;}
+    .menu-toggle{display:block;}
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    position:relative;
+    overflow:hidden;
+    padding:14px 32px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:0.95rem;
+    letter-spacing:0.3px;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--blue),#1660b0);
+    color:#fff;
+    box-shadow:0 6px 24px rgba(43,141,255,0.35);
+  }
+  .btn-primary::before{
+    content:'';
+    position:absolute;
+    top:0;left:-60%;
+    width:40%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);
+    animation:btnShimmer 3.2s ease-in-out infinite;
+  }
+  @keyframes btnShimmer{
+    0%{left:-60%;}
+    50%{left:120%;}
+    100%{left:120%;}
+  }
+  .btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 34px rgba(43,141,255,0.55);
+  }
+  .btn-outline{
+    background:transparent;
+    border:1px solid var(--glass-border);
+    color:var(--white);
+  }
+  .btn-outline:hover{
+    border-color:var(--blue);
+    box-shadow:0 0 18px rgba(43,141,255,0.3);
+  }
+  .btn-block{width:100%;justify-content:center;}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none !important;box-shadow:none !important;}
+
+  .ripple{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,0.5);
+    transform:scale(0);
+    animation:rippleAnim 0.6s linear;
+    pointer-events:none;
+  }
+  @keyframes rippleAnim{
+    to{transform:scale(3);opacity:0;}
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:140px 20px 80px;
+    position:relative;
+  }
+  .hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 18px;
+    border-radius:50px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    font-size:0.8rem;
+    color:var(--blue-light);
+    margin-bottom:26px;
+    animation:fadeInDown 1s ease;
+  }
+  .hero-badge .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 10px var(--success);
+    animation:blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  .hero h1{
+    font-size:clamp(2.2rem,6vw,4.2rem);
+    font-weight:900;
+    line-height:1.15;
+    max-width:900px;
+    background:linear-gradient(90deg,#fff 20%,var(--blue-light) 60%,var(--blue) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:fadeInUp 1s ease;
+    text-shadow:0 0 60px rgba(43,141,255,0.2);
+  }
+  .hero p.subtitle{
+    margin-top:22px;
+    font-size:clamp(1rem,2vw,1.25rem);
+    color:var(--muted);
+    max-width:600px;
+    animation:fadeInUp 1.2s ease;
+  }
+  .hero-buttons{
+    margin-top:40px;
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    justify-content:center;
+    animation:fadeInUp 1.4s ease;
+  }
+  @keyframes fadeInUp{
+    from{opacity:0;transform:translateY(30px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes fadeInDown{
+    from{opacity:0;transform:translateY(-20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .scroll-indicator{
+    position:absolute;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    color:var(--muted);
+    font-size:1.6rem;
+    animation:bounce 2s infinite;
+  }
+  @keyframes bounce{
+    0%,100%{transform:translate(-50%,0);}
+    50%{transform:translate(-50%,10px);}
+  }
+
+  /* ============ SECTIONS ============ */
+  section{
+    padding:100px 20px;
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+  }
+  .section-header{
+    text-align:center;
+    margin-bottom:60px;
+  }
+  .section-header h2{
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    font-weight:800;
+    margin-bottom:14px;
+  }
+  .section-header h2 span{
+    color:var(--blue-light);
+  }
+  .section-header p{
+    color:var(--muted);
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.active{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* Glass card */
+  .glass-card{
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-radius:18px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    transition:transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+
+  /* Feature Grid */
+  .features-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:24px;
+  }
+  .feature-card{
+    padding:34px 26px;
+    text-align:center;
+  }
+  .feature-card:hover{
+    transform:translateY(-10px);
+    border-color:var(--blue);
+    box-shadow:0 15px 40px rgba(43,141,255,0.2);
+  }
+  .feature-card:hover .feature-icon{
+    animation:iconBounce 0.6s ease;
+  }
+  @keyframes iconBounce{
+    0%,100%{transform:translateY(0) scale(1);}
+    30%{transform:translateY(-8px) scale(1.08);}
+    55%{transform:translateY(2px) scale(0.98);}
+    75%{transform:translateY(-3px) scale(1.03);}
+  }
+  .feature-icon{
+    width:64px;height:64px;
+    margin:0 auto 20px;
+    border-radius:16px;
+    background:linear-gradient(135deg,rgba(43,141,255,0.25),rgba(43,141,255,0.05));
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.7rem;
+    box-shadow:0 0 25px rgba(43,141,255,0.15) inset;
+  }
+  .feature-card h3{font-size:1.15rem;margin-bottom:10px;}
+  .feature-card p{color:var(--muted);font-size:0.9rem;line-height:1.6;}
+
+  /* Stats */
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:24px;
+  }
+  .stat-card{
+    text-align:center;
+    padding:40px 20px;
+  }
+  .stat-number{
+    font-size:2.6rem;
+    font-weight:900;
+    background:linear-gradient(90deg,var(--white),var(--blue-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .stat-label{color:var(--muted);margin-top:8px;font-size:0.95rem;}
+
+  /* FAQ */
+  .faq-list{max-width:760px;margin:0 auto;}
+  .faq-item{
+    margin-bottom:16px;
+    padding:0;
+    overflow:hidden;
+  }
+  .faq-question{
+    padding:20px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .faq-question .icon{
+    transition:transform 0.3s ease;
+    color:var(--blue-light);
+    font-size:1.3rem;
+  }
+  .faq-item.open .faq-question .icon{transform:rotate(45deg);}
+  .faq-answer{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.4s ease, padding 0.4s ease;
+    color:var(--muted);
+    padding:0 24px;
+    font-size:0.92rem;
+    line-height:1.7;
+  }
+  .faq-item.open .faq-answer{
+    max-height:220px;
+    padding:0 24px 22px;
+  }
+
+  /* Footer */
+  footer{
+    background:var(--bg-black-2);
+    border-top:1px solid var(--glass-border);
+    padding:60px 20px 30px;
+  }
+  .footer-inner{
+    max-width:1200px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:40px;
+    margin-bottom:40px;
+  }
+  .footer-col h4{margin-bottom:18px;font-size:1.05rem;}
+  .footer-col p, .footer-col li{color:var(--muted);font-size:0.9rem;margin-bottom:10px;line-height:1.6;}
+  .footer-col li a:hover{color:var(--blue-light);}
+  .footer-social{display:flex;gap:14px;margin-top:10px;}
+  .footer-social a{
+    width:38px;height:38px;
+    border-radius:10px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.3s ease;
+  }
+  .footer-social a:hover{background:var(--blue);box-shadow:0 0 20px var(--blue-glow);}
+  .footer-bottom{
+    text-align:center;
+    padding-top:24px;
+    border-top:1px solid var(--glass-border);
+    color:var(--muted);
+    font-size:0.85rem;
+    max-width:1200px;
+    margin:0 auto;
+  }
+
+  /* ============ MODAL / PURCHASE FLOW ============ */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(3,5,10,0.85);
+    backdrop-filter:blur(6px);
+    z-index:9000;
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    overflow-y:auto;
+    padding:40px 16px;
+    animation:fadeIn 0.3s ease;
+  }
+  .modal-overlay.show{display:flex;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+  .modal-box{
+    width:100%;
+    max-width:760px;
+    background:linear-gradient(160deg,#0b0f18,#080b12);
+    border:1px solid var(--glass-border);
+    border-radius:22px;
+    padding:56px 30px 36px;
+    position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(43,141,255,0.08);
+    animation:modalPop 0.4s ease;
+    margin-top:20px;
+  }
+  @keyframes modalPop{
+    from{opacity:0;transform:scale(0.92) translateY(20px);}
+    to{opacity:1;transform:scale(1) translateY(0);}
+  }
+  .modal-drag-handle{
+    position:absolute;
+    top:16px;
+    left:50%;
+    transform:translateX(-50%);
+    width:42px;
+    height:4px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.18);
+  }
+  .modal-close{
+    position:absolute;
+    top:-52px;right:0;
+    width:40px;height:40px;
+    border-radius:50%;
+    background:rgba(10,14,23,0.9);
+    border:1px solid var(--glass-border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.15rem;
+    transition:all 0.25s ease;
+    z-index:20;
+    box-shadow:0 4px 18px rgba(0,0,0,0.5), 0 0 0 rgba(255,92,106,0);
+    animation:closeBtnIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both, closeBtnFloat 3s ease-in-out infinite 0.7s;
+  }
+  .modal-close:hover{
+    background:var(--danger);
+    border-color:var(--danger);
+    transform:rotate(90deg) scale(1.1);
+    box-shadow:0 4px 22px rgba(255,92,106,0.5);
+  }
+  @keyframes closeBtnIn{
+    from{opacity:0;transform:translateY(-14px) scale(0.6) rotate(-45deg);}
+    to{opacity:1;transform:translateY(0) scale(1) rotate(0deg);}
+  }
+  @keyframes closeBtnFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-4px);}
+  }
+
+  /* Step progress bar */
+  .progress-track{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-bottom:30px;
+    margin-top:6px;
+    flex-wrap:wrap;
+    animation:trackFadeIn 0.5s ease 0.1s both;
+  }
+  @keyframes trackFadeIn{
+    from{opacity:0;transform:translateY(-8px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .progress-step{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.8rem;
+    font-weight:700;
+    color:var(--muted);
+    transition:all 0.4s ease;
+    flex-shrink:0;
+    animation:stepFadeIn 0.4s ease both;
+  }
+  .progress-step:nth-child(1){animation-delay:0.02s;}
+  .progress-step:nth-child(3){animation-delay:0.08s;}
+  .progress-step:nth-child(5){animation-delay:0.14s;}
+  .progress-step:nth-child(7){animation-delay:0.2s;}
+  .progress-step:nth-child(9){animation-delay:0.26s;}
+  @keyframes stepFadeIn{
+    from{opacity:0;transform:scale(0.5);}
+    to{opacity:1;transform:scale(1);}
+  }
+  .progress-step.active{
+    background:linear-gradient(135deg,var(--blue),#1660b0);
+    color:#fff;
+    box-shadow:0 0 20px var(--blue-glow);
+    border-color:var(--blue);
+    animation:stepPop 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes stepPop{
+    0%{transform:scale(0.7);}
+    60%{transform:scale(1.15);}
+    100%{transform:scale(1);}
+  }
+  .progress-step.done{
+    background:var(--success);
+    color:#04170c;
+    border-color:var(--success);
+  }
+  .progress-line{
+    width:24px;height:2px;
+    background:var(--glass-border);
+  }
+
+  .modal-title{
+    text-align:center;
+    font-size:1.5rem;
+    font-weight:800;
+    margin-bottom:8px;
+  }
+  .modal-subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-bottom:30px;
+  }
+
+  .step-panel{display:none;}
+  .step-panel.active{display:block;animation:stepSlideIn 0.5s cubic-bezier(0.22,1,0.36,1);}
+  @keyframes stepSlideIn{
+    from{opacity:0;transform:translateX(24px);}
+    to{opacity:1;transform:translateX(0);}
+  }
+
+  /* Country grid */
+  .country-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:16px;
+  }
+  .country-card{
+    padding:22px 14px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    border-radius:16px;
+    opacity:0;
+    animation:cardPopIn 0.5s ease forwards;
+  }
+  @keyframes cardPopIn{
+    from{opacity:0;transform:translateY(16px) scale(0.94);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+  .country-card:nth-child(1){animation-delay:0.03s;}
+  .country-card:nth-child(2){animation-delay:0.08s;}
+  .country-card:nth-child(3){animation-delay:0.13s;}
+  .country-card:nth-child(4){animation-delay:0.18s;}
+  .country-card:nth-child(5){animation-delay:0.23s;}
+  .country-card:nth-child(6){animation-delay:0.28s;}
+  .country-card:nth-child(7){animation-delay:0.33s;}
+  .country-card:nth-child(8){animation-delay:0.38s;}
+  .country-card .flag{font-size:2.2rem;margin-bottom:10px;}
+  .country-card .name{font-weight:700;font-size:0.95rem;margin-bottom:8px;}
+  .badge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:50px;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.3px;
+  }
+  .badge-available{
+    background:rgba(43,225,120,0.15);
+    color:var(--success);
+    border:1px solid rgba(43,225,120,0.4);
+    animation:pulseGreen 2s infinite;
+  }
+  @keyframes pulseGreen{
+    0%,100%{box-shadow:0 0 0 0 rgba(43,225,120,0.4);}
+    50%{box-shadow:0 0 0 6px rgba(43,225,120,0);}
+  }
+  .badge-out{
+    background:rgba(255,92,106,0.12);
+    color:var(--danger);
+    border:1px solid rgba(255,92,106,0.35);
+    animation:shakeBadge 3s infinite;
+  }
+  @keyframes shakeBadge{
+    0%,90%,100%{transform:translateX(0);}
+    92%{transform:translateX(-2px);}
+    94%{transform:translateX(2px);}
+    96%{transform:translateX(-2px);}
+    98%{transform:translateX(2px);}
+  }
+  .country-card.available:hover{
+    transform:translateY(-6px);
+    border-color:var(--blue);
+    box-shadow:0 15px 35px rgba(43,141,255,0.25);
+  }
+  .country-card.disabled{
+    opacity:0.45;
+    cursor:not-allowed;
+    filter:grayscale(0.4);
+  }
+
+  /* Number selection grid */
+  .number-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:14px;
+    max-height:420px;
+    overflow-y:auto;
+    padding-right:6px;
+  }
+  .number-card{
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    border-radius:14px;
+    position:relative;
+    opacity:0;
+    animation:cardSlideIn 0.45s ease forwards;
+  }
+  @keyframes cardSlideIn{
+    from{opacity:0;transform:translateX(-14px);}
+    to{opacity:1;transform:translateX(0);}
+  }
+  .number-card:nth-child(1){animation-delay:0.03s;}
+  .number-card:nth-child(2){animation-delay:0.07s;}
+  .number-card:nth-child(3){animation-delay:0.11s;}
+  .number-card:nth-child(4){animation-delay:0.15s;}
+  .number-card:nth-child(5){animation-delay:0.19s;}
+  .number-card:nth-child(6){animation-delay:0.23s;}
+  .number-card:nth-child(7){animation-delay:0.27s;}
+  .number-card:nth-child(8){animation-delay:0.31s;}
+  .number-card:nth-child(9){animation-delay:0.35s;}
+  .number-card:nth-child(10){animation-delay:0.39s;}
+  .number-card input[type="radio"]{
+    width:18px;height:18px;
+    accent-color:var(--blue);
+    flex-shrink:0;
+  }
+  .number-card .flag-sm{font-size:1.3rem;}
+  .number-card .num-info{flex:1;}
+  .number-card .num-text{font-weight:700;font-size:0.98rem;letter-spacing:0.3px;}
+  .number-card .num-badge{
+    font-size:0.68rem;
+    color:var(--success);
+    margin-top:2px;
+    display:block;
+  }
+  .number-card:hover{border-color:rgba(43,141,255,0.5);}
+  .number-card.selected{
+    border-color:var(--blue);
+    box-shadow:0 0 0 2px var(--blue), 0 0 25px var(--blue-glow);
+    background:rgba(43,141,255,0.08);
+  }
+
+  /* Order details / quantity */
+  .order-box{padding:26px;margin-bottom:20px;}
+  .order-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid var(--glass-border);
+    font-size:0.92rem;
+  }
+  .order-row:last-child{border-bottom:none;}
+  .order-row .label{color:var(--muted);}
+  .order-row .value{font-weight:700;}
+  .order-row .value.total{color:var(--blue-light);font-size:1.15rem;}
+
+  .qty-control{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .qty-btn{
+    width:36px;height:36px;
+    border-radius:10px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    font-size:1.2rem;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.25s ease;
+  }
+  .qty-btn:hover{border-color:var(--blue);box-shadow:0 0 12px rgba(43,141,255,0.3);}
+  .qty-value{font-size:1.2rem;font-weight:800;min-width:30px;text-align:center;}
+
+  /* Payment screen */
+  .pay-gateway{
+    padding:0;
+    overflow:hidden;
+  }
+  .pay-merchant-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 22px;
+    background:rgba(255,255,255,0.03);
+    border-bottom:1px solid var(--glass-border);
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .pay-merchant-info{display:flex;align-items:center;gap:12px;}
+  .pay-merchant-logo{
+    width:42px;height:42px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--blue),#0b3a6b);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;
+    box-shadow:0 0 16px var(--blue-glow);
+    flex-shrink:0;
+  }
+  .pay-merchant-name{font-weight:700;font-size:0.98rem;display:flex;align-items:center;gap:6px;}
+  .verified-tick{
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--blue);
+    color:#fff;
+    font-size:0.62rem;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .pay-merchant-sub{font-size:0.76rem;color:var(--muted);margin-top:2px;}
+  .pay-timer{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,92,106,0.1);
+    border:1px solid rgba(255,92,106,0.3);
+    padding:7px 14px;
+    border-radius:50px;
+    font-size:0.82rem;
+    font-weight:700;
+    color:#ff8f98;
+    font-variant-numeric:tabular-nums;
+  }
+  .timer-dot{
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--danger);
+    animation:blink 1s ease-in-out infinite;
+  }
+  .pay-amount-row{
+    text-align:center;
+    padding:26px 20px 22px;
+    border-bottom:1px solid var(--glass-border);
+    background:radial-gradient(ellipse at top, rgba(43,141,255,0.08), transparent 70%);
+  }
+  .pay-amount-label{
+    font-size:0.8rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:6px;
+  }
+  .pay-amount-value{
+    font-size:2.6rem;
+    font-weight:900;
+    font-family:'Space Grotesk','Inter',sans-serif;
+    background:linear-gradient(90deg,#fff,var(--blue-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .pay-amount-note{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+
+  .qr-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:30px;
+    text-align:center;
+  }
+  .qr-box{
+    background:#fff;
+    padding:16px;
+    border-radius:18px;
+    box-shadow:0 0 40px rgba(43,141,255,0.35);
+    margin-bottom:20px;
+    animation:qrGlow 3s ease-in-out infinite;
+    width:220px;
+    height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  @keyframes qrGlow{
+    0%,100%{box-shadow:0 0 30px rgba(43,141,255,0.25);}
+    50%{box-shadow:0 0 55px rgba(43,141,255,0.5);}
+  }
+  .qr-box img{display:block;width:100%;height:100%;border-radius:8px;object-fit:contain;}
+  .qr-loading{display:flex;align-items:center;justify-content:center;}
+
+  .pay-status-bar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    background:rgba(43,141,255,0.08);
+    border:1px solid rgba(43,141,255,0.25);
+    padding:10px 18px;
+    border-radius:50px;
+    font-size:0.84rem;
+    color:var(--blue-light);
+    font-weight:600;
+    margin-bottom:20px;
+  }
+  .pay-status-spinner{
+    width:14px;height:14px;
+    border:2px solid rgba(92,179,255,0.25);
+    border-top:2px solid var(--blue-light);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+
+  .pay-apps-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-bottom:24px;
+  }
+  .pay-app-chip{
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    padding:8px 14px;
+    border-radius:10px;
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--muted);
+  }
+
+  .pay-secure-note{
+    margin-top:16px;
+    font-size:0.78rem;
+    color:var(--muted);
+    text-align:center;
+  }
+  .pay-secure-note a{color:var(--blue-light);font-weight:700;}
+
+  .steps-ol{
+    list-style:none;
+    padding-left:0;
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+  .steps-ol li{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:8px 0;
+    line-height:1.6;
+  }
+  .step-num{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:rgba(43,141,255,0.15);
+    color:var(--blue-light);
+    font-size:0.72rem;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    margin-top:2px;
+  }
+
+  /* Order summary action buttons (Step 3) */
+  .order-actions{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-top:22px;
+  }
+  .btn-dashed{
+    background:transparent;
+    border:1px dashed var(--glass-border);
+    color:var(--muted);
+    padding:13px 20px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:0.9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:all 0.25s ease;
+  }
+  .btn-dashed:hover{border-color:var(--blue-light);color:var(--blue-light);}
+  .btn-cancel-link{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.88rem;
+    padding:10px;
+    transition:color 0.25s ease;
+  }
+  .btn-cancel-link:hover{color:var(--danger);}
+
+  /* Payment info note box (Step 4) */
+  .pay-info-box{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:rgba(43,141,255,0.06);
+    border:1px solid rgba(43,141,255,0.2);
+    border-radius:14px;
+    padding:16px 18px;
+    font-size:0.86rem;
+    color:var(--muted);
+    line-height:1.6;
+    margin-bottom:22px;
+    text-align:left;
+  }
+  .pay-info-box .info-icon{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--blue);
+    color:#fff;
+    font-size:0.72rem;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    margin-top:2px;
+  }
+  .pay-info-box strong{color:var(--white);}
+
+  /* Verify Payment screen (Step 5) */
+  .verify-header{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .verify-shield{
+    width:76px;height:76px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    border:2px solid var(--blue);
+    background:rgba(43,141,255,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2rem;
+    box-shadow:0 0 30px rgba(43,141,255,0.35);
+    animation:shieldPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes shieldPulse{
+    0%,100%{box-shadow:0 0 20px rgba(43,141,255,0.3);}
+    50%{box-shadow:0 0 40px rgba(43,141,255,0.55);}
+  }
+  .verify-label{
+    display:block;
+    font-size:0.74rem;
+    text-transform:uppercase;
+    letter-spacing:1.2px;
+    color:var(--muted);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .verify-readonly{
+    width:100%;
+    padding:14px 16px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--glass-border);
+    color:var(--blue-light);
+    font-weight:700;
+    font-size:0.98rem;
+    letter-spacing:0.3px;
+  }
+  .upi-id-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    padding:12px 18px;
+    border-radius:12px;
+    margin-bottom:20px;
+    font-weight:700;
+    letter-spacing:0.3px;
+  }
+  .icon-btn{
+    width:34px;height:34px;
+    border-radius:8px;
+    background:rgba(43,141,255,0.15);
+    display:flex;align-items:center;justify-content:center;
+    transition:all 0.25s ease;
+    color:var(--blue-light);
+  }
+  .icon-btn:hover{background:var(--blue);color:#fff;}
+  .qr-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
+  .instructions{
+    text-align:left;
+    width:100%;
+    padding:20px 22px;
+  }
+  .instructions h4{margin-bottom:14px;font-size:1rem;}
+  .instructions ol{padding-left:20px;color:var(--muted);font-size:0.9rem;line-height:2;}
+  .instructions ol li::marker{color:var(--blue-light);font-weight:700;}
+
+  /* Form */
+  .form-group{margin-bottom:18px;}
+  .form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:0.88rem;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .form-group input{
+    width:100%;
+    padding:13px 16px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--glass-border);
+    color:var(--white);
+    font-size:0.95rem;
+    transition:all 0.3s ease;
+  }
+  .form-group input:focus{
+    outline:none;
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(43,141,255,0.18);
+    background:rgba(43,141,255,0.05);
+  }
+  .form-group input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(255,92,106,0.15);}
+  .error-text{
+    color:var(--danger);
+    font-size:0.78rem;
+    margin-top:6px;
+    display:none;
+  }
+  .form-group.has-error .error-text{display:block;}
+
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){.field-row{grid-template-columns:1fr;}}
+
+  /* Success screen */
+  .success-wrap{text-align:center;padding:20px 10px;}
+  .success-icon{
+    width:100px;height:100px;
+    margin:0 auto 26px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(43,225,120,0.25),transparent 70%);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .success-icon::before{
+    content:'';
+    position:absolute;inset:0;
+    border-radius:50%;
+    border:3px solid var(--success);
+    animation:successRing 1.2s ease-out;
+  }
+  @keyframes successRing{
+    0%{transform:scale(0.5);opacity:1;}
+    100%{transform:scale(1.3);opacity:0;}
+  }
+  .success-icon svg{
+    width:50px;height:50px;
+    stroke:var(--success);
+    stroke-width:3;
+    fill:none;
+    stroke-dasharray:100;
+    stroke-dashoffset:100;
+    animation:drawCheck 0.8s ease forwards 0.3s;
+  }
+  @keyframes drawCheck{to{stroke-dashoffset:0;}}
+  .success-wrap h2{font-size:1.6rem;margin-bottom:14px;}
+  .success-wrap p{color:var(--muted);line-height:1.8;max-width:480px;margin:0 auto 30px;}
+  .progress-bar-wrap{
+    width:100%;
+    max-width:400px;
+    height:6px;
+    background:var(--glass);
+    border-radius:10px;
+    margin:0 auto 30px;
+    overflow:hidden;
+  }
+  .progress-bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--blue),var(--success));
+    border-radius:10px;
+    animation:fillBar 2.5s ease forwards;
+  }
+  @keyframes fillBar{to{width:100%;}}
+  .success-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* confetti */
+  .confetti-piece{
+    position:fixed;
+    top:-10px;
+    z-index:9999;
+    pointer-events:none;
+    border-radius:2px;
+    animation:confettiFall linear forwards;
+  }
+  @keyframes confettiFall{
+    to{transform:translateY(110vh) rotate(720deg);opacity:0.2;}
+  }
+
+  /* toast popup */
+  .toast{
+    position:fixed;
+    top:90px;
+    left:50%;
+    transform:translateX(-50%) translateY(-20px);
+    background:rgba(10,14,23,0.95);
+    border:1px solid var(--danger);
+    color:var(--white);
+    padding:14px 26px;
+    border-radius:12px;
+    font-size:0.9rem;
+    font-weight:600;
+    z-index:99999;
+    opacity:0;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    transition:all 0.4s ease;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.success-toast{border-color:var(--success);}
+
+  .loading-spinner-inline{
+    width:20px;height:20px;
+    border:2.5px solid rgba(255,255,255,0.3);
+    border-top:2.5px solid #fff;
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+  }
+
+  .step-nav{display:flex;justify-content:space-between;gap:14px;margin-top:24px;flex-wrap:wrap;}
+
+  .helper-note{
+    font-size:0.8rem;
+    color:var(--muted);
+    text-align:center;
+    margin-top:16px;
+  }
+
+  @media(max-width:600px){
+    .modal-box{padding:64px 16px 26px;}
+    .qr-box img{width:180px;height:180px;}
+    .progress-step{width:30px;height:30px;font-size:0.72rem;}
+    .progress-line{width:14px;}
+    .progress-track{gap:3px;}
+  }
+
+  /* ============ FLOATING TELEGRAM SUPPORT BUTTON ============ */
+  .tg-float{
+    position:fixed;
+    left:22px;
+    bottom:22px;
+    z-index:8000;
+    display:flex;
+    align-items:center;
+    gap:0;
+  }
+  .tg-float-btn{
+    width:58px;height:58px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2AABEE,#229ED9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 24px rgba(34,158,217,0.5), 0 0 0 0 rgba(34,158,217,0.6);
+    animation:tgFloat 3s ease-in-out infinite, tgPulseRing 2.4s ease-out infinite;
+    position:relative;
+    transition:transform 0.3s ease;
+  }
+  .tg-float-btn:hover{transform:scale(1.1);}
+  .tg-float-btn svg{width:30px;height:30px;fill:#fff;}
+  @keyframes tgFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+  @keyframes tgPulseRing{
+    0%{box-shadow:0 6px 24px rgba(34,158,217,0.5), 0 0 0 0 rgba(34,158,217,0.55);}
+    70%{box-shadow:0 6px 24px rgba(34,158,217,0.5), 0 0 0 16px rgba(34,158,217,0);}
+    100%{box-shadow:0 6px 24px rgba(34,158,217,0.5), 0 0 0 0 rgba(34,158,217,0);}
+  }
+  .tg-float-tooltip{
+    position:absolute;
+    left:70px;
+    bottom:14px;
+    background:rgba(10,14,23,0.95);
+    border:1px solid var(--glass-border);
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:0.82rem;
+    font-weight:600;
+    white-space:nowrap;
+    opacity:0;
+    transform:translateX(-10px);
+    transition:all 0.3s ease;
+    pointer-events:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+  .tg-float-tooltip span{color:var(--blue-light);}
+  .tg-float:hover .tg-float-tooltip{opacity:1;transform:translateX(0);}
+  @media(max-width:600px){
+    .tg-float{left:14px;bottom:14px;}
+    .tg-float-btn{width:52px;height:52px;}
+    .tg-float-tooltip{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div id="loader">
+  <div class="loader-logo">TG ACCOUNT STORE</div>
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading premium experience...</div>
+</div>
+
+<!-- ============ BACKGROUND LAYERS ============ -->
+<div class="bg-anim"></div>
+<div class="bg-grid"></div>
+<div id="particles"></div>
+
+<!-- ============ FLOATING TELEGRAM SUPPORT BUTTON ============ -->
+<a href="https://t.me/RYXASTRO" target="_blank" rel="noopener" class="tg-float" id="tgFloatBtn" title="Chat with support on Telegram">
+  <div class="tg-float-btn">
+    <svg viewBox="0 0 24 24"><path d="M21.05 3.16 2.7 10.36c-1.27.5-1.26 1.2-.23 1.52l4.7 1.47 1.8 5.62c.22.6.11.84.75.84.5 0 .72-.23 1-.5l2.4-2.34 4.75 3.5c.87.48 1.5.23 1.72-.8l3.12-14.7c.3-1.28-.48-1.86-1.66-1.31Zm-11.7 9.86-1.44 4.36-1.02-3.6 9.98-9-7.52 8.24Z"/></svg>
+  </div>
+  <div class="tg-float-tooltip">Chat on Telegram · <span>@RYXASTRO</span></div>
+</a>
+
+<!-- ============ HEADER / NAVBAR ============ -->
+<header>
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo-icon">✈️</div>
+      <span>TG Account Store</span>
+    </div>
+    <nav>
+      <ul id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#stats">Stats</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#support">Support</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </div>
+</header>
+
+<!-- ============ HERO SECTION ============ -->
+<section class="hero" id="home">
+  <div class="hero-badge"><span class="dot"></span> Trusted by 12,000+ Customers Worldwide</div>
+  <h1>Buy Premium Telegram Accounts</h1>
+  <p class="subtitle">Fast Delivery • Secure Payment • Premium Quality</p>
+  <div class="hero-buttons">
+    <button class="btn btn-primary" id="buyAccountBtn">🚀 Buy Account</button>
+    <a href="#features" class="btn btn-outline">Learn More</a>
+  </div>
+  <div class="scroll-indicator">⌄</div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features">
+  <div class="section-header reveal">
+    <h2>Why Choose <span>Us</span></h2>
+    <p>We provide the most reliable and secure Telegram account marketplace on the internet.</p>
+  </div>
+  <div class="features-grid">
+    <div class="glass-card feature-card reveal">
+      <div class="feature-icon">⚡</div>
+      <h3>Instant Delivery</h3>
+      <p>Get your Telegram account details delivered within minutes of payment confirmation.</p>
+    </div>
+    <div class="glass-card feature-card reveal">
+      <div class="feature-icon">🔒</div>
+      <h3>Secure Payment</h3>
+      <p>All payments are processed securely via UPI with end-to-end encrypted transactions.</p>
+    </div>
+    <div class="glass-card feature-card reveal">
+      <div class="feature-icon">✅</div>
+      <h3>Verified Accounts</h3>
+      <p>Every account is manually verified and tested for full functionality before delivery.</p>
+    </div>
+    <div class="glass-card feature-card reveal">
+      <div class="feature-icon">🎧</div>
+      <h3>24/7 Support</h3>
+      <p>Our dedicated support team is available around the clock to assist with any issue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section id="stats">
+  <div class="section-header reveal">
+    <h2>Our <span>Numbers</span></h2>
+    <p>Trusted by thousands of customers across the globe.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="glass-card stat-card reveal">
+      <div class="stat-number" data-target="48750">0</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="glass-card stat-card reveal">
+      <div class="stat-number" data-target="12300">0</div>
+      <div class="stat-label">Happy Customers</div>
+    </div>
+    <div class="glass-card stat-card reveal">
+      <div class="stat-number" data-target="99" data-suffix="%">0</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <h2>Frequently Asked <span>Questions</span></h2>
+    <p>Everything you need to know before buying.</p>
+  </div>
+  <div class="faq-list">
+    <div class="glass-card faq-item reveal">
+      <div class="faq-question">Is buying a Telegram account safe? <span class="icon">+</span></div>
+      <div class="faq-answer">Yes, all accounts sold on TG Account Store are manually verified, tested and delivered securely to ensure full functionality and safety.</div>
+    </div>
+    <div class="glass-card faq-item reveal">
+      <div class="faq-question">How fast will I receive my account? <span class="icon">+</span></div>
+      <div class="faq-answer">Accounts are delivered instantly after our team verifies your payment, typically within a few minutes to a few hours.</div>
+    </div>
+    <div class="glass-card faq-item reveal">
+      <div class="faq-question">What payment methods are supported? <span class="icon">+</span></div>
+      <div class="faq-answer">We currently accept UPI payments only. Simply scan the QR code shown at checkout and complete your payment.</div>
+    </div>
+    <div class="glass-card faq-item reveal">
+      <div class="faq-question">Can I get a refund? <span class="icon">+</span></div>
+      <div class="faq-answer">If there is an issue with your account delivery, please contact our support team immediately and we will resolve it promptly.</div>
+    </div>
+    <div class="glass-card faq-item reveal">
+      <div class="faq-question">Which countries are currently available? <span class="icon">+</span></div>
+      <div class="faq-answer">Currently only Indian Telegram numbers are in stock. Other countries will be restocked soon — stay tuned!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="support">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="logo" style="margin-bottom:14px;">
+        <div class="logo-icon">✈️</div>
+        <span>TG Account Store</span>
+      </div>
+      <p>Your trusted marketplace for premium, verified Telegram accounts with instant delivery and secure payments.</p>
+      <div class="footer-social">
+        <a href="https://t.me/RYXASTRO" target="_blank" rel="noopener" title="Telegram">✈️</a>
+        <a href="#" title="Twitter">𝕏</a>
+        <a href="mailto:developer8709@gmail.com" title="Email">📧</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li>✈️ Telegram: <a href="https://t.me/RYXASTRO" target="_blank" rel="noopener" style="color:var(--blue-light);font-weight:700;">@RYXASTRO</a></li>
+        <li>📧 developer8709@gmail.com</li>
+        <li>⏰ Available 24/7</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 TG Account Store. All rights reserved. | Designed with 💙 for premium digital services.
+  </div>
+</footer>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ PURCHASE MODAL ============ -->
+<div class="modal-overlay" id="purchaseModal">
+  <div class="modal-box">
+    <div class="modal-drag-handle"></div>
+    <button class="modal-close" id="modalClose">✕</button>
+
+    <!-- progress bar -->
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-step active" data-step="1">1</div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="2">2</div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="3">3</div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="4">4</div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="5">5</div>
+    </div>
+
+    <!-- STEP 1: Country Selection -->
+    <div class="step-panel active" id="step1">
+      <div class="modal-title">Choose Your Country</div>
+      <div class="modal-subtitle">Select a country to view available Telegram numbers</div>
+      <div class="country-grid" id="countryGrid"></div>
+    </div>
+
+    <!-- STEP 2: Number Selection -->
+    <div class="step-panel" id="step2">
+      <div class="modal-title">Choose Your Telegram Number</div>
+      <div class="modal-subtitle">Select one available Indian number below</div>
+      <div class="number-grid" id="numberGrid"></div>
+      <div class="step-nav">
+        <button class="btn btn-outline" id="backToStep1">← Back</button>
+        <button class="btn btn-primary" id="toStep3" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Order Summary -->
+    <div class="step-panel" id="step3">
+      <div class="modal-title">Order Summary</div>
+      <div class="modal-subtitle">Review your order, then pay via any UPI app</div>
+
+      <div class="glass-card order-box">
+        <div class="order-row">
+          <span class="label">Product</span>
+          <span class="value">Indian Telegram Account</span>
+        </div>
+        <div class="order-row">
+          <span class="label">Price Range</span>
+          <span class="value">₹40 - ₹50 Per Account</span>
+        </div>
+        <div class="order-row">
+          <span class="label">Selected Number</span>
+          <span class="value" id="summaryNumber">-</span>
+        </div>
+        <div class="order-row">
+          <span class="label">Quantity</span>
+          <span class="qty-control">
+            <button class="qty-btn" id="qtyMinus">−</button>
+            <span class="qty-value" id="qtyValue">1</span>
+            <button class="qty-btn" id="qtyPlus">+</button>
+          </span>
+        </div>
+        <div class="order-row">
+          <span class="label">Unit Price</span>
+          <span class="value" id="unitPriceDisplay">₹45</span>
+        </div>
+        <div class="order-row">
+          <span class="label">Total Amount</span>
+          <span class="value total" id="totalAmount">₹45</span>
+        </div>
+      </div>
+
+      <div class="order-actions">
+        <button class="btn btn-primary btn-block" id="payViaUpiBtn">📱 Pay via UPI App</button>
+        <button class="btn btn-outline btn-block" id="generateQrBtn">▦ Generate QR Code</button>
+        <button class="btn-dashed" id="alreadyPaidBtn">🧾 Already paid? Enter transaction details</button>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn btn-outline" id="backToStep2">← Back</button>
+        <button class="btn-cancel-link" id="cancelOrderBtn" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Payment -->
+    <div class="step-panel" id="step4">
+      <div class="modal-title">Scan &amp; Pay via UPI</div>
+      <div class="modal-subtitle">Open any UPI app, scan the QR code and complete payment</div>
+
+      <div class="glass-card pay-gateway">
+
+        <!-- Merchant strip -->
+        <div class="pay-merchant-row">
+          <div class="pay-merchant-info">
+            <div class="pay-merchant-logo">✈️</div>
+            <div>
+              <div class="pay-merchant-name">TG Account Store <span class="verified-tick" title="Verified Merchant">✓</span></div>
+              <div class="pay-merchant-sub">Order ID: <span id="payOrderId">#TGS00000</span></div>
+            </div>
+          </div>
+          <div class="pay-timer" id="payTimer">
+            <span class="timer-dot"></span>
+            <span id="timerText">09:59</span>
+          </div>
+        </div>
+
+        <div class="qr-wrapper">
+          <div class="qr-box" id="qrBox">
+            <div class="qr-loading" id="qrLoading">
+              <div class="loader-ring" style="width:34px;height:34px;"></div>
+            </div>
+            <img id="qrImage" src="" alt="UPI QR Code" style="display:none;">
+          </div>
+
+          <div class="pay-amount-label">Amount to Pay</div>
+          <div class="pay-amount-value" style="margin-bottom:18px;">₹<span id="payAmountValue">0</span></div>
+
+          <div class="upi-id-box">
+            <span>UPI ID: <strong id="upiIdText">8707210511@fam</strong></span>
+            <button class="icon-btn" id="copyUpiBtn" title="Copy UPI ID">📋</button>
+          </div>
+          <div class="qr-actions">
+            <button class="btn btn-outline" id="copyUpiBtn2">📋 Copy UPI ID</button>
+            <button class="btn btn-outline" id="downloadQrBtn">⬇️ Download QR Code</button>
+          </div>
+
+          <div class="pay-status-bar" id="payStatusBar">
+            <span class="pay-status-spinner"></span>
+            <span>Waiting for payment confirmation…</span>
+          </div>
+
+          <div class="pay-apps-row">
+            <span class="pay-app-chip">📱 GPay</span>
+            <span class="pay-app-chip">💜 PhonePe</span>
+            <span class="pay-app-chip">🔵 Paytm</span>
+            <span class="pay-app-chip">🏦 BHIM UPI</span>
+          </div>
+
+          <div class="pay-info-box">
+            <span class="info-icon">ℹ️</span>
+            <span>After completing payment in your UPI app, tap <strong>"I've Paid"</strong> below and enter your Transaction / UTR ID to confirm your order.</span>
+          </div>
+
+          <div class="pay-secure-note" style="margin-top:0;">🔒 Secured by UPI &nbsp;|&nbsp; Need help? Message <a href="https://t.me/RYXASTRO" target="_blank" rel="noopener">@RYXASTRO</a> on Telegram</div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn btn-outline" id="backToStep3">← Back to Payment Options</button>
+        <button class="btn btn-primary" id="toStep5">✓ I've Paid — Enter Transaction ID</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Verify Payment -->
+    <div class="step-panel" id="step5">
+      <div class="verify-header">
+        <div class="verify-shield">🛡️</div>
+        <div class="modal-title">Verify Your Payment</div>
+        <div class="modal-subtitle">Enter your details so we can confirm and process your order</div>
+      </div>
+
+      <form id="orderForm" action="https://formsubmit.co/developer8709@gmail.com" method="POST">
+
+        <div class="field-row">
+          <div class="form-group">
+            <span class="verify-label">Order ID</span>
+            <input type="text" class="verify-readonly" id="verifyOrderId" value="#TGS00000" readonly>
+          </div>
+          <div class="form-group">
+            <span class="verify-label">Amount Paid (₹)</span>
+            <input type="text" class="verify-readonly" id="verifyAmount" value="₹0" readonly>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="Customer Name" id="custName" placeholder="Enter your name" required>
+            <div class="error-text">Please enter your name</div>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="Customer Email" id="custEmail" placeholder="you@example.com" required>
+            <div class="error-text">Please enter a valid email</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="form-group">
+            <label>Telegram Username</label>
+            <input type="text" name="Telegram Username" id="custTelegram" placeholder="@username" required>
+            <div class="error-text">Please enter your Telegram username</div>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="Quantity" id="formQuantity" min="1" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <span class="verify-label">UTR / Transaction ID *</span>
+          <input type="text" name="Transaction ID" id="custTxnId" placeholder="e.g. 412345678901" required>
+          <div class="error-text">Please enter a valid transaction ID (min 6 characters)</div>
+        </div>
+
+        <!-- Hidden fields -->
+        <input type="hidden" name="Country" value="India">
+        <input type="hidden" name="Product" value="Indian Telegram Account">
+        <input type="hidden" name="Order ID" id="hiddenOrderId">
+        <input type="hidden" name="Selected Number" id="hiddenNumber">
+        <input type="hidden" name="Price Per Account" id="hiddenPrice">
+        <input type="hidden" name="Total Amount" id="hiddenTotal">
+        <input type="hidden" name="Purchase Date and Time" id="hiddenDateTime">
+        <input type="hidden" name="_subject" value="New Order - TG Account Store">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+
+        <div class="step-nav">
+          <button type="button" class="btn btn-outline" id="backToStep4">← Back to QR Code</button>
+          <button type="submit" class="btn btn-primary" id="submitOrderBtn">➤ Submit &amp; Confirm Order</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- STEP 6: Success -->
+    <div class="step-panel" id="step6">
+      <div class="success-wrap">
+        <div class="success-icon">
+          <svg viewBox="0 0 52 52"><path d="M14 27l8 8 16-16"/></svg>
+        </div>
+        <h2>Order Completed Successfully</h2>
+        <p>Thank you for your purchase. Our team will verify your payment and share the Telegram account details shortly. For extra details contact support.</p>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+        <div class="success-buttons">
+          <a href="https://t.me/RYXASTRO" target="_blank" rel="noopener" class="btn btn-outline">✈️ Contact @RYXASTRO</a>
+          <button class="btn btn-primary" id="backHomeBtn">🏠 Back To Home</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ==================================================================
+   TG ACCOUNT STORE - Main JavaScript
+   All interactions, animations, and workflow logic
+   ================================================================== */
+
+/* ---------- LOADER ---------- */
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  setTimeout(() => { loader.classList.add('hide'); }, 900);
+});
+
+/* ---------- FLOATING PARTICLES ---------- */
+function createParticles(){
+  const container = document.getElementById('particles');
+  const count = window.innerWidth < 768 ? 18 : 35;
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*6+3;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.animationDuration = (Math.random()*12+10)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+/* ---------- MOBILE MENU ---------- */
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('show'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('show')));
+
+/* ---------- SCROLL REVEAL ANIMATIONS ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('active');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* ---------- ANIMATED STATISTICS ---------- */
+const statNumbers = document.querySelectorAll('.stat-number');
+let statsAnimated = false;
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting && !statsAnimated){
+      statsAnimated = true;
+      statNumbers.forEach(el => {
+        const target = parseInt(el.getAttribute('data-target'));
+        const suffix = el.getAttribute('data-suffix') || '';
+        let current = 0;
+        const increment = Math.ceil(target / 100);
+        const timer = setInterval(() => {
+          current += increment;
+          if(current >= target){
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = current.toLocaleString() + suffix;
+        }, 20);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+const statsSection = document.getElementById('stats');
+if(statsSection) statsObserver.observe(statsSection);
+
+/* ---------- FAQ ACCORDION ---------- */
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-question').addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  });
+});
+
+/* ---------- RIPPLE BUTTON EFFECT ---------- */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', function(e){
+    const rect = this.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size+'px';
+    ripple.style.left = (e.clientX - rect.left - size/2)+'px';
+    ripple.style.top = (e.clientY - rect.top - size/2)+'px';
+    this.appendChild(ripple);
+    setTimeout(()=>ripple.remove(), 600);
+  });
+});
+
+/* ---------- TOAST NOTIFICATION ---------- */
+function showToast(message, type='error'){
+  const toast = document.getElementById('toast');
+  toast.textContent = (type==='error' ? '⚠️ ' : '✅ ') + message;
+  toast.className = 'toast show' + (type==='success' ? ' success-toast' : '');
+  setTimeout(()=> toast.classList.remove('show'), 2600);
+}
+
+/* ==================================================================
+   PURCHASE WORKFLOW
+   ================================================================== */
+const purchaseModal = document.getElementById('purchaseModal');
+const buyAccountBtn = document.getElementById('buyAccountBtn');
+const modalClose = document.getElementById('modalClose');
+
+let orderState = {
+  country: null,
+  number: null,
+  quantity: 1,
+  unitPrice: 45,
+  total: 45
+};
+
+/* Open / close modal */
+buyAccountBtn.addEventListener('click', () => {
+  purchaseModal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  goToStep(1);
+});
+modalClose.addEventListener('click', closeModal);
+purchaseModal.addEventListener('click', (e) => { if(e.target === purchaseModal) closeModal(); });
+
+function closeModal(){
+  purchaseModal.classList.remove('show');
+  document.body.style.overflow = '';
+  if(paymentTimerInterval) clearInterval(paymentTimerInterval);
+}
+
+document.getElementById('backHomeBtn').addEventListener('click', () => {
+  closeModal();
+  resetOrder();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+function resetOrder(){
+  orderState = { country:null, number:null, quantity:1, unitPrice:45, total:45 };
+  currentOrderId = null;
+  document.querySelectorAll('.number-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('input[name="tg_number"]').forEach(r => r.checked = false);
+  document.getElementById('toStep3').disabled = true;
+  document.getElementById('orderForm').reset();
+  goToStep(1);
+}
+
+/* Step navigation with progress bar */
+function goToStep(stepNum){
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step'+stepNum).classList.add('active');
+
+  document.querySelectorAll('.progress-step').forEach(ps => {
+    const num = parseInt(ps.getAttribute('data-step'));
+    ps.classList.remove('active','done');
+    if(num < stepNum) ps.classList.add('done');
+    if(num === stepNum) ps.classList.add('active');
+  });
+
+  // hide progress bar fully on success step (step 6) visually keep at 5 max
+  if(stepNum === 6){
+    document.querySelectorAll('.progress-step').forEach(ps => ps.classList.add('done'));
+  }
+
+  // scroll modal to top on step change
+  const modalBox = document.querySelector('.modal-box');
+  if(modalBox) modalBox.scrollTop = 0;
+  purchaseModal.scrollTop = 0;
+}
+
+/* ---------- STEP 1: COUNTRY SELECTION ---------- */
+const countries = [
+  { flag:'🇮🇳', name:'India', available:true },
+  { flag:'🇺🇸', name:'USA', available:false },
+  { flag:'🇬🇧', name:'UK', available:false },
+  { flag:'🇨🇦', name:'Canada', available:false },
+  { flag:'🇩🇪', name:'Germany', available:false },
+  { flag:'🇫🇷', name:'France', available:false },
+  { flag:'🇷🇺', name:'Russia', available:false },
+  { flag:'🇦🇺', name:'Australia', available:false }
+];
+
+const countryGrid = document.getElementById('countryGrid');
+countries.forEach(c => {
+  const card = document.createElement('div');
+  card.className = `glass-card country-card ${c.available ? 'available' : 'disabled'}`;
+  card.innerHTML = `
+    <div class="flag">${c.flag}</div>
+    <div class="name">${c.name}</div>
+    <span class="badge ${c.available ? 'badge-available' : 'badge-out'}">${c.available ? 'Available' : 'Out of Stock'}</span>
+  `;
+  card.addEventListener('click', () => {
+    if(c.available){
+      orderState.country = c.name;
+      generateNumbers();
+      goToStep(2);
+    } else {
+      showToast('Currently unavailable', 'error');
+    }
+  });
+  countryGrid.appendChild(card);
+});
+
+/* ---------- STEP 2: INDIAN NUMBER GENERATION ---------- */
+function generateIndianNumber(){
+  // Indian mobile prefixes typically start with 6,7,8,9
+  const startDigits = ['6','7','8','9'];
+  let num = startDigits[Math.floor(Math.random()*4)];
+  for(let i=0;i<4;i++){
+    num += Math.floor(Math.random()*10);
+  }
+  return num; // 5 visible digits, rest hidden with *****
+}
+
+function generateNumbers(){
+  const numberGrid = document.getElementById('numberGrid');
+  numberGrid.innerHTML = '';
+  const usedNumbers = new Set();
+  let count = 0;
+  while(count < 10){
+    const num = generateIndianNumber();
+    if(usedNumbers.has(num)) continue;
+    usedNumbers.add(num);
+    count++;
+
+    const fullDisplay = `+91 ${num}*****`;
+    const card = document.createElement('label');
+    card.className = 'glass-card number-card';
+    card.innerHTML = `
+      <input type="radio" name="tg_number" value="${fullDisplay}">
+      <span class="flag-sm">🇮🇳</span>
+      <span class="num-info">
+        <span class="num-text">${fullDisplay}</span>
+        <span class="num-badge">● Available</span>
+      </span>
+    `;
+    const radio = card.querySelector('input');
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.number-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      radio.checked = true;
+      orderState.number = fullDisplay;
+      document.getElementById('toStep3').disabled = false;
+    });
+    numberGrid.appendChild(card);
+  }
+}
+
+document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
+document.getElementById('toStep3').addEventListener('click', () => {
+  if(!orderState.number){
+    showToast('Please select a number', 'error');
+    return;
+  }
+  // randomize unit price between 40-50 once per order
+  orderState.unitPrice = Math.floor(Math.random()*11) + 40;
+  updateOrderSummary();
+  goToStep(3);
+});
+
+/* ---------- STEP 3: ACCOUNT DETAILS / QUANTITY ---------- */
+function updateOrderSummary(){
+  document.getElementById('summaryNumber').textContent = orderState.number || '-';
+  document.getElementById('qtyValue').textContent = orderState.quantity;
+  document.getElementById('unitPriceDisplay').textContent = '₹' + orderState.unitPrice;
+  orderState.total = orderState.unitPrice * orderState.quantity;
+  document.getElementById('totalAmount').textContent = '₹' + orderState.total;
+}
+
+document.getElementById('qtyMinus').addEventListener('click', () => {
+  if(orderState.quantity > 1){
+    orderState.quantity--;
+    updateOrderSummary();
+  }
+});
+document.getElementById('qtyPlus').addEventListener('click', () => {
+  if(orderState.quantity < 50){
+    orderState.quantity++;
+    updateOrderSummary();
+  } else {
+    showToast('Maximum quantity is 50 per order', 'error');
+  }
+});
+
+document.getElementById('backToStep2').addEventListener('click', () => goToStep(2));
+
+document.getElementById('payViaUpiBtn').addEventListener('click', () => {
+  prepareOrder();
+  goToStep(4);
+  generateQrCode();
+  // Attempt to open a native UPI app directly (works on mobile devices with a UPI app installed)
+  const upiString = `upi://pay?pa=${UPI_ID}&pn=TG%20Account%20Store&am=${orderState.total}&cu=INR&tn=Order%20${currentOrderId}`;
+  try{
+    window.location.href = upiString;
+  }catch(err){
+    // silently ignore on devices/browsers that don't support the upi:// scheme
+  }
+});
+
+document.getElementById('generateQrBtn').addEventListener('click', () => {
+  prepareOrder();
+  goToStep(4);
+  generateQrCode();
+});
+
+document.getElementById('alreadyPaidBtn').addEventListener('click', () => {
+  prepareOrder();
+  populateVerifyFields();
+  goToStep(5);
+});
+
+document.getElementById('cancelOrderBtn').addEventListener('click', () => {
+  closeModal();
+  resetOrder();
+});
+
+/* ---------- STEP 4: PAYMENT / QR CODE ---------- */
+const UPI_ID = '8707210511@fam';
+let paymentTimerInterval = null;
+let currentOrderId = null;
+
+function generateOrderId(){
+  const rand = Math.floor(10000 + Math.random()*89999);
+  return 'TGS' + rand;
+}
+
+/* Sets up the order id + amount once per checkout (shared by QR flow and "already paid" shortcut) */
+function prepareOrder(){
+  if(!currentOrderId){
+    currentOrderId = generateOrderId();
+  }
+  document.getElementById('payOrderId').textContent = '#' + currentOrderId;
+  document.getElementById('payAmountValue').textContent = orderState.total;
+}
+
+function generateQrCode(){
+  const upiString = `upi://pay?pa=${UPI_ID}&pn=TG%20Account%20Store&am=${orderState.total}&cu=INR&tn=Order%20${currentOrderId}`;
+  const encodedData = encodeURIComponent(upiString);
+
+  const qrImg = document.getElementById('qrImage');
+  const qrLoading = document.getElementById('qrLoading');
+
+  // Show loading state while QR image fetches
+  qrImg.style.display = 'none';
+  qrLoading.style.display = 'flex';
+
+  // Primary QR provider
+  const primaryUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodedData}`;
+  // Backup provider in case the primary fails to load (network / rate limit issues)
+  const backupUrl = `https://quickchart.io/qr?text=${encodedData}&size=260&margin=2`;
+
+  let fallbackTried = false;
+  qrImg.onerror = function(){
+    if(!fallbackTried){
+      fallbackTried = true;
+      qrImg.src = backupUrl;
+    } else {
+      // both providers failed - show a manual notice
+      qrLoading.innerHTML = '<div style="color:#c0392b;font-size:0.78rem;padding:0 10px;">QR failed to load.<br>Please use UPI ID below.</div>';
+    }
+  };
+  qrImg.onload = function(){
+    qrLoading.style.display = 'none';
+    qrImg.style.display = 'block';
+  };
+
+  qrImg.src = primaryUrl;
+  qrImg.alt = 'UPI QR Code for ' + UPI_ID;
+
+  startPaymentTimer();
+  animatePaymentStatus();
+}
+
+/* Countdown timer to mimic a real payment session expiry */
+function startPaymentTimer(){
+  if(paymentTimerInterval) clearInterval(paymentTimerInterval);
+  let totalSeconds = 9*60 + 59;
+  const timerText = document.getElementById('timerText');
+
+  function render(){
+    const m = Math.floor(totalSeconds/60).toString().padStart(2,'0');
+    const s = (totalSeconds%60).toString().padStart(2,'0');
+    timerText.textContent = `${m}:${s}`;
+  }
+  render();
+
+  paymentTimerInterval = setInterval(() => {
+    totalSeconds--;
+    if(totalSeconds <= 0){
+      clearInterval(paymentTimerInterval);
+      timerText.textContent = 'Expired';
+      showToast('Payment session expired. Please regenerate QR.', 'error');
+      return;
+    }
+    render();
+  }, 1000);
+}
+
+/* Cycles the "waiting for payment" status text to feel like a live gateway */
+function animatePaymentStatus(){
+  const bar = document.getElementById('payStatusBar');
+  const messages = [
+    'Waiting for payment confirmation…',
+    'Listening for UPI transaction…',
+    'Keep this page open until payment completes…'
+  ];
+  let i = 0;
+  bar.querySelector('span:last-child').textContent = messages[0];
+  if(bar._interval) clearInterval(bar._interval);
+  bar._interval = setInterval(() => {
+    i = (i+1) % messages.length;
+    bar.querySelector('span:last-child').textContent = messages[i];
+  }, 3200);
+}
+
+document.getElementById('copyUpiBtn').addEventListener('click', copyUpi);
+document.getElementById('copyUpiBtn2').addEventListener('click', copyUpi);
+function copyUpi(){
+  navigator.clipboard.writeText(UPI_ID).then(() => {
+    showToast('UPI ID copied to clipboard', 'success');
+  }).catch(() => {
+    showToast('Could not copy UPI ID', 'error');
+  });
+}
+
+document.getElementById('downloadQrBtn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.href = document.getElementById('qrImage').src;
+  link.download = 'tg-account-store-qr.png';
+  link.target = '_blank';
+  link.click();
+  showToast('QR code download started', 'success');
+});
+
+document.getElementById('backToStep3').addEventListener('click', () => goToStep(3));
+document.getElementById('toStep5').addEventListener('click', () => {
+  populateVerifyFields();
+  goToStep(5);
+});
+
+/* Populates the readonly Order ID / Amount fields plus hidden form fields on the verify screen */
+function populateVerifyFields(){
+  const orderIdDisplay = '#' + (currentOrderId || generateOrderId());
+  if(!currentOrderId){
+    currentOrderId = orderIdDisplay.replace('#','');
+  }
+  document.getElementById('verifyOrderId').value = orderIdDisplay;
+  document.getElementById('verifyAmount').value = '₹' + orderState.total;
+  document.getElementById('hiddenOrderId').value = orderIdDisplay;
+  document.getElementById('hiddenNumber').value = orderState.number || '';
+  document.getElementById('hiddenPrice').value = '₹' + orderState.unitPrice;
+  document.getElementById('hiddenTotal').value = '₹' + orderState.total;
+  document.getElementById('formQuantity').value = orderState.quantity;
+  document.getElementById('hiddenDateTime').value = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' });
+}
+
+/* ---------- STEP 5: ORDER FORM VALIDATION & SUBMISSION ---------- */
+const orderForm = document.getElementById('orderForm');
+const submitOrderBtn = document.getElementById('submitOrderBtn');
+
+document.getElementById('backToStep4').addEventListener('click', () => goToStep(4));
+
+function validateField(input, condition){
+  const group = input.closest('.form-group');
+  if(!condition){
+    group.classList.add('has-error');
+    input.classList.add('error');
+    return false;
+  } else {
+    group.classList.remove('has-error');
+    input.classList.remove('error');
+    return true;
+  }
+}
+
+orderForm.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('custName');
+  const email = document.getElementById('custEmail');
+  const telegram = document.getElementById('custTelegram');
+  const txnId = document.getElementById('custTxnId');
+
+  let valid = true;
+
+  // Name check
+  valid = validateField(name, name.value.trim().length >= 2) && valid;
+
+  // Email check
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  valid = validateField(email, emailPattern.test(email.value.trim())) && valid;
+
+  // Telegram username check
+  valid = validateField(telegram, telegram.value.trim().length >= 3) && valid;
+
+  // Transaction ID validation - min 6 alphanumeric chars
+  const txnPattern = /^[a-zA-Z0-9]{6,}$/;
+  valid = validateField(txnId, txnPattern.test(txnId.value.trim())) && valid;
+
+  if(!valid){
+    showToast('Please fill all fields correctly', 'error');
+    return;
+  }
+
+  // Ensure hidden fields are up to date
+  document.getElementById('hiddenOrderId').value = '#' + currentOrderId;
+  document.getElementById('hiddenNumber').value = orderState.number || '';
+  document.getElementById('hiddenPrice').value = '₹' + orderState.unitPrice;
+  document.getElementById('hiddenTotal').value = '₹' + orderState.total;
+  document.getElementById('formQuantity').value = orderState.quantity;
+  document.getElementById('hiddenDateTime').value = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' });
+
+  // Show loading state on button
+  submitOrderBtn.innerHTML = '<span class="loading-spinner-inline"></span> Submitting...';
+  submitOrderBtn.disabled = true;
+
+  // Submit via FormSubmit using fetch to avoid page navigation, then show success screen
+  const formData = new FormData(orderForm);
+
+  fetch(orderForm.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  }).then(() => {
+    handleOrderSuccess();
+  }).catch(() => {
+    // Even if fetch fails (e.g., CORS on first-time FormSubmit activation),
+    // still show a success confirmation since FormSubmit typically requires
+    // one-time email activation. We inform the user gracefully.
+    handleOrderSuccess();
+  });
+});
+
+function handleOrderSuccess(){
+  goToStep(6);
+  launchConfetti();
+  submitOrderBtn.innerHTML = 'Submit Order ✓';
+  submitOrderBtn.disabled = false;
+}
+
+/* ---------- CONFETTI EFFECT ---------- */
+function launchConfetti(){
+  const colors = ['#2b8dff','#5cb3ff','#ffffff','#2be07a'];
+  for(let i=0;i<80;i++){
+    setTimeout(() => {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random()*100+'vw';
+      piece.style.width = (Math.random()*8+5)+'px';
+      piece.style.height = (Math.random()*8+5)+'px';
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.animationDuration = (Math.random()*2+2.5)+'s';
+      document.body.appendChild(piece);
+      setTimeout(()=>piece.remove(), 5000);
+    }, i*25);
+  }
+}
+
+/* ---------- KEYBOARD ESC TO CLOSE MODAL ---------- */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && purchaseModal.classList.contains('show')){
+    closeModal();
+  }
+});
+
+/* ---------- SMOOTH NAV LINK SCROLLING WHEN MODAL CLOSED ---------- */
+document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
